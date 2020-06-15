@@ -11,8 +11,8 @@ const Header = ({message}) => {
   );
 };
 
-Header.message = {
-  headerMessage: PropTypes.string.isRequired
+Header.propTypes = {
+  message: PropTypes.string.isRequired
 };
 
 const App = () => {
