@@ -1,11 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 
-const color = Math.random > 0.5 ? 'green' : 'red';
+const App = (props) => {
+  return (
+    <h2 className="text-center">
+      {props.headerMessage}
+    </h2>
+  );
+};
+
+App.propTypes = {
+  headerMessage: PropTypes.string.isRequired
+};
 
 ReactDOM.render(
-  <h2 style={{color}}>
-    Hello React with JSX!! -- {Math.random()}
-  </h2>,
+  <App headerMessage="Hello!!"/>,
   document.getElementById('root')
 );
