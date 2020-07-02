@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './Header';
 import ContestList from './ContestList';
 import Contest from './Contest';
-
+import * as api from '../api';
 
 const pushState = (obj, url) => 
   window.history.pushState(obj, '', url);
@@ -25,11 +25,19 @@ class App extends React.Component {
       {currentContestId: contestId},
       `/contest/${contestId}`
     );
-    // lookup the contest
-    this.setState({
-      currentContestId: contestId,
-      pageHeader: this.state.contests[contestId].contestName
-    });
+    api.fetchContest(contestId)
+      .then(contest => {
+        this.setState({
+          currentContestId: contest.id,
+          pageHeader: contest.contestName,
+          contests: {
+            ...this.state.contests,
+            // This helps to retain the description
+            // on object once it is fetched.
+            [contest.id]: contest
+          }
+        });
+      });
   };
 
   currentContent() {
