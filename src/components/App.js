@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import ContestList from './ContestList';
 import Contest from './Contest';
@@ -8,10 +9,10 @@ const pushState = (obj, url) =>
   window.history.pushState(obj, '', url);
 
 class App extends React.Component {
-  state = {
-    pageHeader: 'Naming Contests',
-    contests: this.props.initialContests
+  static propTypes = {
+    initialData: PropTypes.object.isRequired
   }
+  state = this.props.initialData;
   
   componentDidMount(){
   }
@@ -29,7 +30,6 @@ class App extends React.Component {
       .then(contest => {
         this.setState({
           currentContestId: contest.id,
-          pageHeader: contest.contestName,
           contests: {
             ...this.state.contests,
             // This helps to retain the description
@@ -40,9 +40,21 @@ class App extends React.Component {
       });
   };
 
+  currentContest() {
+    return this.state.contests[this.state.currentContestId];
+  }
+
+  pageHeader() {
+    if (this.state.currentContestId) {
+      return this.currentContest().contestName;
+    }
+
+    return 'Naming Contests';
+  }
+
   currentContent() {
     if (this.state.currentContestId) {
-      return <Contest {...this.state.contests[this.state.currentContestId]} />;
+      return <Contest {...this.currentContest()} />;
     }
     else {
       return <ContestList 
@@ -50,10 +62,11 @@ class App extends React.Component {
         contests={this.state.contests} />;
     }
   }
+  
   render() {
     return (
       <div className="App">
-        <Header message={this.state.pageHeader} />
+        <Header message={this.pageHeader()} />
         {this.currentContent()}
       </div>
     );
