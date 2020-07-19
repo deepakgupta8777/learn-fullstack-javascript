@@ -38,12 +38,12 @@ class App extends React.Component {
     api.fetchContest(contestId)
       .then(contest => {
         this.setState({
-          currentContestId: contest.id,
+          currentContestId: contest._id,
           contests: {
             ...this.state.contests,
             // This helps to retain the description
             // on object once it is fetched.
-            [contest.id]: contest
+            [contest._id]: contest
           }
         });
       });
@@ -67,7 +67,7 @@ class App extends React.Component {
     if (nameIds.length === 0) {
       return;
     }
-    
+
     api.fetchNames(nameIds).then(names => {
       this.setState({
         names
